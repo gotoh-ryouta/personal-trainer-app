@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { UserProfile } from '../types';
 import { FaTimes, FaRobot, FaPaperPlane, FaChartLine, FaMedal, FaFire, FaHeart, FaBed, FaUtensils } from 'react-icons/fa';
 import { MdFitnessCenter, MdRestaurant, MdPsychology, MdAutoAwesome } from 'react-icons/md';
+import { AIContextService } from '../services/aiContextService';
 
 interface UltimateAITrainerProps {
   userProfile: UserProfile;
@@ -235,17 +236,25 @@ const UltimateAITrainer: React.FC<UltimateAITrainerProps> = ({
     setInputValue('');
     setShowQuickActions(false);
     setIsTyping(true);
+    
+    // 文脈サービスにメッセージを追加
+    contextService.current.addMessage('user', message);
 
     // AI応答をシミュレート
     setTimeout(() => {
       const aiResponse = generateAIResponse(message);
       setMessages(prev => [...prev, aiResponse]);
+      contextService.current.addMessage('ai', aiResponse.content);
       setIsTyping(false);
     }, 1500);
   };
 
   const generateAIResponse = (userMessage: string): Message => {
     const lowerMessage = userMessage.toLowerCase();
+    
+    // 文脈を分析
+    const contextAnalysis = contextService.current.analyzeContext(userMessage);
+    
     let response: Message = {
       id: Date.now().toString(),
       role: 'ai',
@@ -253,6 +262,12 @@ const UltimateAITrainer: React.FC<UltimateAITrainerProps> = ({
       timestamp: new Date(),
       type: 'text'
     };
+    
+    // 文脈に基づいた応答がある場合は優先
+    if (contextAnalysis.suggestedResponse) {
+      response.content = contextAnalysis.suggestedResponse;
+      return response;
+    }
 
     // 体調不良のキーワードをチェック
     const isUnwell = lowerMessage.includes('風邪') || lowerMessage.includes('体調') || 

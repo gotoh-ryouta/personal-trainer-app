@@ -24,6 +24,22 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({
   onQuickFoodRecord,
   onQuickTaskAdd
 }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  // 日付が変わったら自動更新
+  useEffect(() => {
+    const checkDateChange = () => {
+      const now = new Date();
+      if (format(now, 'yyyy-MM-dd') !== format(currentDate, 'yyyy-MM-dd')) {
+        setCurrentDate(now);
+      }
+    };
+
+    // 1分ごとに日付をチェック
+    const interval = setInterval(checkDateChange, 60000);
+    
+    return () => clearInterval(interval);
+  }, [currentDate]);
   const [greeting, setGreeting] = useState('');
   const [timeOfDay, setTimeOfDay] = useState<'morning' | 'afternoon' | 'evening' | 'night'>('morning');
 
@@ -47,10 +63,9 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({
     }
   }, []);
 
-  // Today's data
-  const today = new Date();
+  // Today's data - currentDateを使用
   const todayTasks = tasks.filter(
-    task => format(task.dueDate, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd')
+    task => format(task.dueDate, 'yyyy-MM-dd') === format(currentDate, 'yyyy-MM-dd')
   );
   const completedTasks = todayTasks.filter(task => task.completed);
   const taskProgress = todayTasks.length > 0 
@@ -58,7 +73,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({
     : 0;
 
   const todayEntries = nutritionEntries.filter(
-    entry => format(entry.date, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd')
+    entry => format(entry.date, 'yyyy-MM-dd') === format(currentDate, 'yyyy-MM-dd')
   );
 
   const todayNutrition = todayEntries.reduce(
