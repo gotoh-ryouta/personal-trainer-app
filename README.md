@@ -1,46 +1,86 @@
-# Getting Started with Create React App
+# パーソナルトレーナーアプリ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Gemini 2.5 Flashを使用した、日々のタスク管理と栄養アドバイスを提供するPWA対応のパーソナルトレーナーアプリです。
 
-## Available Scripts
+## 機能
 
-In the project directory, you can run:
+- **ダッシュボード**: 今日の進捗状況、モチベーショナルメッセージ、栄養アドバイス
+- **タスク管理**: 運動、栄養、生活習慣のタスクを追加・管理
+- **栄養管理**: 
+  - 手動での食事記録
+  - 画像からのカロリー自動計算（Gemini 2.5 Flash使用）
+  - 栄養素の進捗確認
+- **目標設定とプラン生成**:
+  - 目標体重、筋肉量、体脂肪率の設定
+  - AIによる自動フィットネスプラン生成
+- **PWA対応**: モバイルでホーム画面に追加して使用可能
+- **データ永続化**: LocalStorageによるデータ保存
 
-### `npm start`
+## セットアップ
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. 環境変数の設定
+```bash
+cp .env.example .env
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. Gemini APIキーの取得
+- [Google AI Studio](https://makersuite.google.com/app/apikey)でAPIキーを取得
+- `.env`ファイルに`REACT_APP_GEMINI_API_KEY`として設定
 
-### `npm test`
+3. 依存関係のインストール
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. 開発サーバーの起動
+```bash
+npm start
+```
 
-### `npm run build`
+## 使い方
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 初回起動時
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **目標設定**タブで体重、体脂肪率、目標を設定
+2. 「AIプランを生成」をクリックして、パーソナライズされたプランを作成
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 日々の使い方
 
-### `npm run eject`
+1. **タスク管理**:
+   - 「新しいタスクを追加」から運動、栄養、生活習慣のタスクを登録
+   - 完了したタスクにチェックを入れる
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2. **栄養管理**:
+   - 「画像から入力」: 食事の写真を撮影/選択してAIが自動でカロリー計算
+   - 「手動入力」: 食品名と栄養素を手動で入力
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **ダッシュボード**:
+   - 今日の進捗を確認
+   - AIからのアドバイスを参考に調整
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### モバイルでの使用
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. スマートフォンのブラウザでアクセス
+2. ブラウザメニューから「ホーム画面に追加」を選択
+3. アプリとして使用可能
 
-## Learn More
+## 技術スタック
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- React + TypeScript
+- Gemini 2.5 Flash API
+- PWA (Progressive Web App)
+- LocalStorage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ビルド
+
+```bash
+npm run build
+```
+
+ビルドされたファイルは`build`ディレクトリに生成されます。
+
+## 注意事項
+
+- Gemini APIキーは必ず環境変数として設定し、コードに直接記載しないでください
+- 画像分析の精度は目安としてご利用ください
+- 健康に関する重要な判断は、必ず専門家に相談してください
